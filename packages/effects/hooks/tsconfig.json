@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@formulago/tsconfig/web.json",
+  "compilerOptions": {
+    "types": ["vite/client", "@formulago/types/global"]
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}

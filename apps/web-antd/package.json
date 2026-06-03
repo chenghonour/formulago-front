@@ -1,0 +1,38 @@
+{
+  "name": "@formulago/web-antd",
+  "version": "5.7.0",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm vite build --mode production",
+    "build:analyze": "pnpm vite build --mode analyze",
+    "dev": "pnpm vite --mode development",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit --skipLibCheck"
+  },
+  "imports": {
+    "#/*": "./src/*"
+  },
+  "dependencies": {
+    "@formulago/access": "workspace:*",
+    "@formulago/common-ui": "workspace:*",
+    "@formulago/constants": "workspace:*",
+    "@formulago/hooks": "workspace:*",
+    "@formulago/icons": "workspace:*",
+    "@formulago/layouts": "workspace:*",
+    "@formulago/locales": "workspace:*",
+    "@formulago/plugins": "workspace:*",
+    "@formulago/preferences": "workspace:*",
+    "@formulago/request": "workspace:*",
+    "@formulago/stores": "workspace:*",
+    "@formulago/styles": "workspace:*",
+    "@formulago/types": "workspace:*",
+    "@formulago/utils": "workspace:*",
+    "@vueuse/core": "catalog:",
+    "ant-design-vue": "catalog:",
+    "dayjs": "catalog:",
+    "pinia": "catalog:",
+    "vue": "catalog:",
+    "vue-router": "catalog:"
+  }
+}

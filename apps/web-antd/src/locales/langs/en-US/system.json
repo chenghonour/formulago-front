@@ -1,0 +1,204 @@
+{
+  "nav": {
+    "title": "System Management"
+  },
+  "tableTitle": "Data List",
+  "column": {
+    "id": "ID",
+    "name": "Name",
+    "title": "Title",
+    "path": "Path",
+    "component": "Component",
+    "order": "Order",
+    "type": "Type",
+    "description": "Description",
+    "group": "Group",
+    "method": "HTTP Method",
+    "action": "Action",
+    "status": "Status",
+    "createdAt": "Created At",
+    "remark": "Remark",
+    "defaultRouter": "Default Router",
+    "redirect": "Redirect",
+    "icon": "Icon",
+    "parentID": "Parent ID",
+    "nickname": "Nickname",
+    "username": "Username",
+    "email": "Email",
+    "mobile": "Mobile",
+    "password": "Password",
+    "roleID": "Role ID",
+    "roleName": "Role",
+    "token": "Token",
+    "source": "Source",
+    "expiredAt": "Expires At",
+    "api": "API Path",
+    "operator": "Operator",
+    "ip": "IP",
+    "time": "Time",
+    "clientID": "ClientID",
+    "clientSecret": "ClientSecret",
+    "redirectUrl": "Redirect URL",
+    "authUrl": "Auth URL",
+    "tokenUrl": "Token URL",
+    "infoUrl": "User Info URL",
+    "scopes": "Scopes",
+    "authStyle": "Auth Style",
+    "key": "Key",
+    "value": "Value"
+  },
+  "action": {
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save Authorization",
+    "addChild": "Add Submenu",
+    "clear": "Clear Logs",
+    "addAuth": "Add Permission",
+    "detail": "Dict Items"
+  },
+  "status": {
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "success": "Success",
+    "fail": "Fail"
+  },
+  "httpMethod": {
+    "all": "All",
+    "get": "GET",
+    "post": "POST",
+    "put": "PUT",
+    "delete": "DELETE"
+  },
+  "message": {
+    "createSuccess": "Created successfully",
+    "updateSuccess": "Updated successfully",
+    "deleteSuccess": "Deleted successfully",
+    "logsCleared": "Logs cleared",
+    "menuAuthUpdated": "Menu authorization updated",
+    "authAdded": "Permission added",
+    "loadFailed": "Menu loading failed, please refresh and try again"
+  },
+  "confirm": {
+    "deleteMenu": "Are you sure to delete this menu?",
+    "deleteAuth": "Are you sure to delete this permission?"
+  },
+  "placeholder": {
+    "select": "Please select",
+    "input": "Please enter"
+  },
+  "menu": {
+    "title": "Menu Management",
+    "form": {
+      "name": "Name",
+      "title": "Title",
+      "path": "Path",
+      "component": "Component",
+      "redirect": "Redirect",
+      "icon": "Icon",
+      "order": "Order",
+      "parentID": "Parent ID",
+      "menuType": "Menu Type",
+      "hideMenu": "Hide Menu",
+      "hideBreadcrumb": "Hide Breadcrumb",
+      "ignoreKeepAlive": "Ignore Cache",
+      "affixTab": "Affix Tab",
+      "hideChildrenInMenu": "Hide Children",
+      "disabled": "Disabled",
+      "frameSrc": "IFrame URL",
+      "directory": "Directory",
+      "menu": "Menu",
+      "button": "Button",
+      "unknown": "Unknown"
+    },
+    "addTitle": "Add Menu",
+    "editTitle": "Edit Menu",
+    "addChildTitle": "Add Submenu",
+    "placeholder": {
+      "name": "Please enter menu name",
+      "title": "Please enter menu title"
+    }
+  },
+  "user": {
+    "title": "User Management",
+    "addTitle": "Add User",
+    "editTitle": "Edit User",
+    "placeholder": {
+      "username": "Please enter username",
+      "nickname": "Please enter nickname",
+      "email": "Please enter email",
+      "mobile": "Please enter mobile"
+    }
+  },
+  "role": {
+    "title": "Role Management",
+    "addTitle": "Add Role",
+    "editTitle": "Edit Role",
+    "placeholder": {
+      "name": "Please enter role name"
+    }
+  },
+  "api": {
+    "title": "API Management",
+    "addTitle": "Add API",
+    "editTitle": "Edit API",
+    "placeholder": {
+      "path": "Please enter path",
+      "description": "Please enter description",
+      "group": "Please enter group",
+      "method": "Please select method"
+    }
+  },
+  "dict": {
+    "title": "Dictionary Management",
+    "addTitle": "Add Dictionary",
+    "editTitle": "Edit Dictionary",
+    "detailTitle": "Add Dict Item",
+    "detailEditTitle": "Edit Dict Item",
+    "placeholder": {
+      "title": "Please enter dictionary title",
+      "name": "Please enter dictionary name"
+    },
+    "filter": {
+      "title": "Dict Title",
+      "name": "Dict Name"
+    }
+  },
+  "oauth": {
+    "title": "OAuth Management",
+    "addTitle": "Add OAuth Provider",
+    "editTitle": "Edit OAuth Provider"
+  },
+  "token": {
+    "title": "Token Management",
+    "editTitle": "Edit Token",
+    "placeholder": {
+      "username": "Please enter username"
+    }
+  },
+  "logs": {
+    "title": "Operation Logs",
+    "placeholder": {
+      "api": "Please enter API path",
+      "operator": "Please enter operator"
+    },
+    "filter": {
+      "api": "API Path",
+      "operator": "Operator",
+      "method": "HTTP Method",
+      "status": "Status"
+    }
+  },
+  "authority": {
+    "api": {
+      "title": "API Authorization"
+    },
+    "menu": {
+      "title": "Menu Authorization"
+    },
+    "selectRole": "Select Role:",
+    "placeholderRole": "Please select a role",
+    "apiListTitle": "API Permissions",
+    "menuListTitle": "Menu Permissions"
+  }
+}

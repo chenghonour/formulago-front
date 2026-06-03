@@ -1,0 +1,204 @@
+{
+  "nav": {
+    "title": "系统管理"
+  },
+  "tableTitle": "数据列表",
+  "column": {
+    "id": "ID",
+    "name": "名称",
+    "title": "标题",
+    "path": "路径",
+    "component": "组件",
+    "order": "排序",
+    "type": "类型",
+    "description": "描述",
+    "group": "分组",
+    "method": "请求方式",
+    "action": "操作",
+    "status": "状态",
+    "createdAt": "创建时间",
+    "remark": "备注",
+    "defaultRouter": "默认路由",
+    "redirect": "重定向",
+    "icon": "图标",
+    "parentID": "父ID",
+    "nickname": "昵称",
+    "username": "用户名",
+    "email": "邮箱",
+    "mobile": "手机号",
+    "password": "密码",
+    "roleID": "角色ID",
+    "roleName": "角色",
+    "token": "Token",
+    "source": "来源",
+    "expiredAt": "过期时间",
+    "api": "API路径",
+    "operator": "操作人",
+    "ip": "IP",
+    "time": "时间",
+    "clientID": "ClientID",
+    "clientSecret": "ClientSecret",
+    "redirectUrl": "回调地址",
+    "authUrl": "授权URL",
+    "tokenUrl": "令牌URL",
+    "infoUrl": "用户信息URL",
+    "scopes": "授权范围",
+    "authStyle": "授权模式",
+    "key": "键",
+    "value": "值"
+  },
+  "action": {
+    "add": "新增",
+    "edit": "编辑",
+    "delete": "删除",
+    "save": "保存授权",
+    "addChild": "添加子菜单",
+    "clear": "清空日志",
+    "addAuth": "添加权限",
+    "detail": "字典项"
+  },
+  "status": {
+    "enabled": "启用",
+    "disabled": "禁用",
+    "success": "成功",
+    "fail": "失败"
+  },
+  "httpMethod": {
+    "all": "全部",
+    "get": "GET",
+    "post": "POST",
+    "put": "PUT",
+    "delete": "DELETE"
+  },
+  "message": {
+    "createSuccess": "创建成功",
+    "updateSuccess": "更新成功",
+    "deleteSuccess": "删除成功",
+    "logsCleared": "日志已清空",
+    "menuAuthUpdated": "菜单授权更新成功",
+    "authAdded": "添加成功",
+    "loadFailed": "菜单加载失败，请刷新页面重试"
+  },
+  "confirm": {
+    "deleteMenu": "确定删除该菜单吗？",
+    "deleteAuth": "确定删除该权限吗？"
+  },
+  "placeholder": {
+    "select": "请选择",
+    "input": "请输入"
+  },
+  "menu": {
+    "title": "菜单管理",
+    "form": {
+      "name": "名称",
+      "title": "标题",
+      "path": "路径",
+      "component": "组件",
+      "redirect": "重定向",
+      "icon": "图标",
+      "order": "排序",
+      "parentID": "父ID",
+      "menuType": "菜单类型",
+      "hideMenu": "隐藏菜单",
+      "hideBreadcrumb": "隐藏面包屑",
+      "ignoreKeepAlive": "忽略缓存",
+      "affixTab": "固定标签",
+      "hideChildrenInMenu": "隐藏子菜单",
+      "disabled": "禁用",
+      "frameSrc": "IFrame地址",
+      "directory": "目录",
+      "menu": "菜单",
+      "button": "按钮",
+      "unknown": "未知"
+    },
+    "addTitle": "新增菜单",
+    "editTitle": "编辑菜单",
+    "addChildTitle": "添加子菜单",
+    "placeholder": {
+      "name": "请输入菜单名称",
+      "title": "请输入菜单标题"
+    }
+  },
+  "user": {
+    "title": "用户管理",
+    "addTitle": "新增用户",
+    "editTitle": "编辑用户",
+    "placeholder": {
+      "username": "请输入用户名",
+      "nickname": "请输入昵称",
+      "email": "请输入邮箱",
+      "mobile": "请输入手机号"
+    }
+  },
+  "role": {
+    "title": "角色管理",
+    "addTitle": "新增角色",
+    "editTitle": "编辑角色",
+    "placeholder": {
+      "name": "请输入角色名称"
+    }
+  },
+  "api": {
+    "title": "API管理",
+    "addTitle": "新增API",
+    "editTitle": "编辑API",
+    "placeholder": {
+      "path": "请输入路径",
+      "description": "请输入描述",
+      "group": "请输入分组",
+      "method": "请选择"
+    }
+  },
+  "dict": {
+    "title": "字典管理",
+    "addTitle": "新增字典",
+    "editTitle": "编辑字典",
+    "detailTitle": "新增字典项",
+    "detailEditTitle": "编辑字典项",
+    "placeholder": {
+      "title": "请输入字典标题",
+      "name": "请输入字典标识"
+    },
+    "filter": {
+      "title": "字典标题",
+      "name": "字典标识"
+    }
+  },
+  "oauth": {
+    "title": "OAuth管理",
+    "addTitle": "新增OAuth提供商",
+    "editTitle": "编辑OAuth提供商"
+  },
+  "token": {
+    "title": "Token管理",
+    "editTitle": "编辑Token",
+    "placeholder": {
+      "username": "请输入用户名"
+    }
+  },
+  "logs": {
+    "title": "操作日志",
+    "placeholder": {
+      "api": "请输入API路径",
+      "operator": "请输入操作人"
+    },
+    "filter": {
+      "api": "API路径",
+      "operator": "操作人",
+      "method": "请求方式",
+      "status": "状态"
+    }
+  },
+  "authority": {
+    "api": {
+      "title": "API授权"
+    },
+    "menu": {
+      "title": "菜单授权"
+    },
+    "selectRole": "选择角色：",
+    "placeholderRole": "请选择角色",
+    "apiListTitle": "API 权限列表",
+    "menuListTitle": "菜单权限"
+  }
+}
