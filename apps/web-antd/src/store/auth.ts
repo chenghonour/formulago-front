@@ -1,17 +1,22 @@
-import type { Recordable, UserInfo } from '@formulago/types';
+import type { Recordable } from '@formulago/types';
+
+import type { BackendUserInfo } from '#/api/system/model/userModel';
 
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { LOGIN_PATH } from '@formulago/constants';
-import { preferences } from '@formulago/preferences';
-import { resetAllStores, useAccessStore, useUserStore } from '@formulago/stores';
+import {
+  resetAllStores,
+  useAccessStore,
+  useUserStore,
+} from '@formulago/stores';
 
 import { message, notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
 import { getAccessCodesApi, loginApi, logoutApi } from '#/api/core/auth';
-import { getUserInfoApi } from '#/api/core/user';
+import { getUserInfoApi } from '#/api/system/user';
 import { $t } from '#/locales';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -31,7 +36,7 @@ export const useAuthStore = defineStore('auth', () => {
     onSuccess?: () => Promise<void> | void,
   ) {
     // 异步处理用户登录操作并获取 accessToken
-    let userInfo: null | UserInfo = null;
+    let userInfo: BackendUserInfo | null = null;
     try {
       loginLoading.value = true;
       const { accessToken } = await loginApi(params);
@@ -57,13 +62,13 @@ export const useAuthStore = defineStore('auth', () => {
           onSuccess
             ? await onSuccess?.()
             : await router.push(
-                userInfo.homePath || preferences.app.defaultHomePath,
+                userInfo.defaultRouter || '/dashboard',
               );
         }
 
-        if (userInfo?.realName) {
+        if (userInfo?.nickname) {
           notification.success({
-            description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
+            description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.nickname}`,
             duration: 3,
             message: $t('authentication.loginSuccess'),
           });

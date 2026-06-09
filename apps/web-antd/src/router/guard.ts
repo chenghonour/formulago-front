@@ -1,17 +1,17 @@
-import type { RouteRecordRaw, Router } from 'vue-router';
+import type { Router, RouteRecordRaw } from 'vue-router';
 
 import { LOGIN_PATH } from '@formulago/constants';
 import { preferences } from '@formulago/preferences';
 import { useAccessStore, useUserStore } from '@formulago/stores';
 import { startProgress, stopProgress } from '@formulago/utils';
 
+import { message } from 'ant-design-vue';
+
 import { $t } from '#/locales';
 import { accessRoutes, coreRouteNames } from '#/router/routes';
 import { useAuthStore } from '#/store';
 
 import { generateAccess } from './access';
-
-import { message } from 'ant-design-vue';
 
 /**
  * 通用守卫配置
@@ -58,8 +58,7 @@ function setupAccessGuard(router: Router) {
       if (to.path === LOGIN_PATH && accessStore.accessToken) {
         return decodeURIComponent(
           (to.query?.redirect as string) ||
-            userStore.userInfo?.homePath ||
-            preferences.app.defaultHomePath,
+            userStore.userInfo?.defaultRouter || '/dashboard',
         );
       }
       return true;
@@ -96,7 +95,7 @@ function setupAccessGuard(router: Router) {
     // 生成路由表
     // 当前登录用户拥有的角色标识列表
     const userInfo = userStore.userInfo || (await authStore.fetchUserInfo());
-    const userRoles = userInfo.roles ?? [];
+    const userRoles = userInfo.roleName ? [userInfo.roleName] : [];
 
     // 生成菜单和路由
     let accessibleMenus, accessibleRoutes;
@@ -122,7 +121,7 @@ function setupAccessGuard(router: Router) {
     accessStore.setIsAccessChecked(true);
     const redirectPath = (from.query.redirect ??
       (to.path === preferences.app.defaultHomePath
-        ? userInfo.homePath || preferences.app.defaultHomePath
+        ? userInfo.defaultRouter || '/dashboard'
         : to.fullPath)) as string;
 
     return {

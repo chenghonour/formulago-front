@@ -8,7 +8,6 @@ import '@formulago/styles';
 import '@formulago/styles/antd';
 
 import { useTitle } from '@vueuse/core';
-
 import Antd from 'ant-design-vue';
 
 import { setupI18n } from '#/locales';

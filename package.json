@@ -42,8 +42,6 @@
     "update:deps": "npx taze -r -w"
   },
   "devDependencies": {
-    "@tsdown/css": "catalog:",
-    "@types/node": "catalog:",
     "@formulago/commitlint-config": "workspace:*",
     "@formulago/eslint-config": "workspace:*",
     "@formulago/oxfmt-config": "workspace:*",
@@ -54,6 +52,8 @@
     "@formulago/turbo-run": "workspace:*",
     "@formulago/vite-config": "workspace:*",
     "@formulago/vsh": "workspace:*",
+    "@tsdown/css": "catalog:",
+    "@types/node": "catalog:",
     "@vitejs/plugin-vue": "catalog:",
     "@vitejs/plugin-vue-jsx": "catalog:",
     "cross-env": "catalog:",

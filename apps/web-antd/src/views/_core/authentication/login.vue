@@ -6,9 +6,8 @@ import { computed, h, markRaw, onMounted, ref } from 'vue';
 import { AuthenticationLogin, z } from '@formulago/common-ui';
 import { $t } from '@formulago/locales';
 
-import { useAuthStore } from '#/store';
-
 import { captchaApi } from '#/api';
+import { useAuthStore } from '#/store';
 
 defineOptions({ name: 'Login' });
 
@@ -61,15 +60,12 @@ const formSchema = computed((): VbenFormSchema[] => {
       fieldName: 'captcha',
       label: $t('authentication.captcha'),
       rules: z.string().min(1, { message: $t('authentication.captchaTip') }),
-    },
-    {
-      component: markRaw({
+      suffix: markRaw({
         render() {
           return h(
             'div',
             {
-              class: 'captcha-wrapper',
-              style: 'display:flex;align-items:center;gap:8px;cursor:pointer;',
+              style: 'cursor:pointer;display:flex;align-items:center;',
               onClick: loadCaptcha,
             },
             captchaImg.value
@@ -80,15 +76,12 @@ const formSchema = computed((): VbenFormSchema[] => {
                 })
               : h(
                   'span',
-                  { style: 'font-size:12px;color:#999;' },
-                  '加载验证码...',
+                  { style: 'font-size:12px;color:#999;white-space:nowrap;' },
+                  loadingCaptcha.value ? '加载中...' : '加载验证码',
                 ),
           );
         },
-      }),
-      fieldName: '__captcha_image',
-      label: '',
-      rules: z.any().optional(),
+      }) as any,
     },
   ];
 });

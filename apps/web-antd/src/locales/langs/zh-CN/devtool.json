@@ -1,0 +1,28 @@
+{
+  "struct": {
+    "deleteTag": {
+      "title": "删除 Struct Tag",
+      "action": "删除 Tag"
+    },
+    "toProto": {
+      "title": "Struct 转 Proto",
+      "action": "转换"
+    },
+    "label": {
+      "input": "输入结构体代码",
+      "output": "输出结果"
+    },
+    "placeholder": {
+      "input": "请粘贴结构体代码...",
+      "output": "处理结果..."
+    },
+    "action": {
+      "clear": "清空",
+      "copy": "复制结果"
+    },
+    "message": {
+      "success": "处理成功",
+      "copied": "已复制到剪贴板"
+    }
+  }
+}

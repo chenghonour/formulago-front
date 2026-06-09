@@ -1,0 +1,28 @@
+{
+  "struct": {
+    "deleteTag": {
+      "title": "Delete Struct Tag",
+      "action": "Delete Tag"
+    },
+    "toProto": {
+      "title": "Struct to Proto",
+      "action": "Convert"
+    },
+    "label": {
+      "input": "Input Struct Code",
+      "output": "Output"
+    },
+    "placeholder": {
+      "input": "Paste struct code here...",
+      "output": "Result..."
+    },
+    "action": {
+      "clear": "Clear",
+      "copy": "Copy Result"
+    },
+    "message": {
+      "success": "Processed successfully",
+      "copied": "Copied to clipboard"
+    }
+  }
+}

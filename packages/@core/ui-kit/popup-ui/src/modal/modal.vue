@@ -228,7 +228,7 @@ function handleClosed() {
 </script>
 <template>
   <Dialog
-    :modal="false"
+    :modal="modal"
     :open="state?.isOpen"
     @update:open="() => (!submitting ? modalApi?.close() : undefined)"
   >
@@ -264,6 +264,7 @@ function handleClosed() {
       @close-auto-focus="handleFocusOutside"
       @closed="handleClosed"
       :close-disabled="submitting"
+      @close="() => modalApi?.close()"
       @escape-key-down="escapeKeyDown"
       @focus-outside="handleFocusOutside"
       @interact-outside="interactOutside"

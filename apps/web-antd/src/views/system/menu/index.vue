@@ -1,72 +1,33 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { useVbenDrawer } from '@formulago/common-ui';
+import { IconifyIcon, Plus } from '@formulago/icons';
 
-import { useVbenModal } from '@formulago/common-ui';
+import { Button, message, Switch } from 'ant-design-vue';
 
-import { message } from 'ant-design-vue';
-
-import {
-  createMenuApi,
-  deleteMenuApi,
-  getMenuListApi,
-  updateMenuApi,
-} from '#/api/core/menu-admin';
-import { $t } from '#/locales';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { deleteMenuApi, getMenuListApi } from '#/api/system/menu';
+import { $t } from '#/locales';
 
-import { IconifyIcon } from '@formulago/icons';
+import MenuDrawer from './menu-drawer.vue';
+import { flattenTree, menuColumns, menuSearchSchemas } from './menu.data';
 
-/** 将嵌套树形数据压平为一维数组 */
-function flattenTree(items: any[]): any[] {
-  const result: any[] = [];
-  const walk = (list: any[]) => {
-    for (const item of list) {
-      const { children, ...rest } = item;
-      result.push(rest);
-      if (children?.length) walk(children);
-    }
-  };
-  walk(items);
-  return result;
-}
-
-defineOptions({ name: 'SystemMenu' });
+defineOptions({ name: 'MenuManagement' });
 
 const [Grid, gridApi] = useVbenVxeGrid({
+  tableTitle: $t('system.menu.title'),
+  // 配置与表格关联的查询表单选项
   formOptions: {
-    schema: [
-      { component: 'Input', fieldName: 'name', label: $t('system.column.name'), componentProps: { placeholder: $t('system.menu.placeholder.name') } },
-      { component: 'Input', fieldName: 'title', label: $t('system.column.title'), componentProps: { placeholder: $t('system.menu.placeholder.title') } },
-    ],
+     // 传入查询表单的结构定义
+    schema: menuSearchSchemas,
   },
+  // 表格本身的配置选项
   gridOptions: {
-    columns: [
-      { field: 'ID', title: 'ID', width: 80 },
-      { field: 'name', title: $t('system.column.name'), width: 200, treeNode: true, slots: { default: 'nameSlot' } },
-      {
-        field: 'title',
-        title: $t('system.column.title'),
-        width: 150,
-        slots: { default: 'titleSlot' },
-      },
-      { field: 'path', title: $t('system.column.path'), minWidth: 160 },
-      { field: 'component', title: $t('system.column.component'), minWidth: 160 },
-      { field: 'orderNo', title: $t('system.column.order'), width: 80 },
-      {
-        field: 'menuType',
-        title: $t('system.column.type'),
-        width: 100,
-        formatter: ({ cellValue }: { cellValue: number }) => getMenuTypeText(cellValue),
-      },
-      {
-        field: 'action',
-        title: $t('system.column.action'),
-        width: 250,
-        slots: { default: 'actionSlot' },
-      },
-    ],
+    columns: menuColumns,
+    // 代理配置：用于处理数据请求，将表格与后端 API 绑定
     proxyConfig: {
       ajax: {
+        // 数据查询方法：当触发查询时自动调用
+        // params 包含分页信息，customValues 包含表单的查询条件
         query: async (params: any, customValues: any) => {
           const f = customValues ?? {};
           const result = await getMenuListApi({
@@ -75,147 +36,73 @@ const [Grid, gridApi] = useVbenVxeGrid({
             name: f.name || '',
             title: f.title || '',
           });
-          // 后端返回嵌套数据，压平后由 treeConfig.transform 重建树形
+          // 返回处理后的数据：
+          // 1. 使用 flattenTree 将树形数据扁平化（适配 VxeTable 的树形展示）
+          // 2. 返回总条数用于分页或虚拟滚动计算
           return { items: flattenTree(result.data || []), total: result.total };
         },
       },
     },
+    height: 'auto',
+    // 纵向虚拟滚动配置
+    scrollY: {
+      enabled: true,
+      gt: 0,
+    },
+    // 工具栏配置
     toolbarConfig: {
-      refresh: true,
-      zoom: true,
-      search: true,
+      refresh: true, // 显示刷新按钮
+      zoom: true,    // 显示全屏缩放按钮
+      search: true,  // 显示搜索按钮
     },
-    pagerConfig: { enabled: false },
+    // 分页配置
+    pagerConfig: { 
+      enabled: false // 禁用分页（因为树形表格通常一次性加载所有数据）
+    },
+    // 行配置
     rowConfig: {
-      keyField: 'ID',
+      keyField: 'ID', // 指定每行数据的唯一标识字段为 'ID'
     },
+    // 树形表格配置
     treeConfig: {
-      rowField: 'ID',
-      parentField: 'parentID',
-      transform: true,
-      expandAll: true,
+      rowField: 'ID',       // 当前行的唯一标识字段
+      parentField: 'parentID', // 父级行的标识字段
+      transform: true,      // 开启数据转换（将扁平数组自动转换为树形结构）
+      expandAll: true,      // 默认展开所有树节点
     },
   },
 });
 
-const editForm = reactive<any>({
-  ID: undefined,
-  parentID: 0,
-  name: '',
-  path: '',
-  component: '',
-  redirect: '',
-  orderNo: 0,
-  menuType: 0,
-  disabled: false,
-  meta: {
-    title: '',
-    icon: '',
-    hideMenu: false,
-    hideBreadcrumb: false,
-    ignoreKeepAlive: false,
-    affix: false,
-    frameSrc: '',
-    hideChildrenInMenu: false,
-  },
-});
-const editTitle = ref('');
-
-const [MenuModal, menuModalApi] = useVbenModal({
-  onCancel() {
-    menuModalApi.close();
-  },
-  onConfirm() {
-    handleSave();
-  },
+// 返回两个值：
+// 1. MenuDrawerComp: 抽屉的 Vue 组件实例，需要挂载到当前页面的模板（template）中
+// 2. menuDrawerApi: 用于控制抽屉的 API 对象（如打开、关闭、传递数据等）
+const [MenuDrawerComp, menuDrawerApi] = useVbenDrawer({
+  class: 'w-180',
+  // 关联实际的抽屉内容子组件
+  connectedComponent: MenuDrawer,
 });
 
 function openAdd(parentId?: number) {
-  editTitle.value = parentId ? $t('system.menu.addChildTitle') : $t('system.menu.addTitle');
-  resetForm();
-  if (parentId) {
-    editForm.parentID = parentId;
-  }
-  menuModalApi.open();
+  menuDrawerApi.setData({
+    parentID: parentId,
+    isEdit: false,
+    onSuccess: () => gridApi.query(),
+  });
+  menuDrawerApi.open();
 }
 
 function openEdit(record: any) {
-  editTitle.value = $t('system.menu.editTitle');
-  editForm.ID = record.ID;
-  editForm.parentID = record.parentID;
-  editForm.name = record.name;
-  editForm.path = record.path;
-  editForm.component = record.component;
-  editForm.redirect = record.redirect;
-  editForm.orderNo = record.orderNo;
-  editForm.menuType = record.menuType;
-  editForm.disabled = record.disabled;
-  editForm.meta = { ...record.meta };
-  menuModalApi.open();
-}
-
-function resetForm() {
-  editForm.ID = undefined;
-  editForm.parentID = 0;
-  editForm.name = '';
-  editForm.path = '';
-  editForm.component = '';
-  editForm.redirect = '';
-  editForm.orderNo = 0;
-  editForm.menuType = 0;
-  editForm.disabled = false;
-  editForm.meta = {
-    title: '',
-    icon: '',
-    hideMenu: false,
-    hideBreadcrumb: false,
-    ignoreKeepAlive: false,
-    affix: false,
-    frameSrc: '',
-    hideChildrenInMenu: false,
-  };
-}
-
-function getMenuTypeText(menuType: number) {
-  const map: Record<number, string> = {
-    0: $t('system.menu.form.directory'),
-    1: $t('system.menu.form.menu'),
-    2: $t('system.menu.form.button'),
-  };
-  return map[menuType] || $t('system.menu.form.unknown');
-}
-
-async function handleSave() {
-  try {
-    const data = {
-      ID: editForm.ID || undefined,
-      parentID: editForm.parentID,
-      name: editForm.name,
-      path: editForm.path,
-      component: editForm.component,
-      redirect: editForm.redirect || undefined,
-      orderNo: editForm.orderNo,
-      menuType: editForm.menuType,
-      disabled: editForm.disabled,
-      meta: editForm.meta,
-    };
-    if (editForm.ID) {
-      await updateMenuApi(data);
-      message.success($t('system.message.updateSuccess'));
-    } else {
-      await createMenuApi(data);
-      message.success($t('system.message.createSuccess'));
-    }
-    menuModalApi.close();
-    gridApi.query();
-  } catch (error) {
-    console.error(error);
-  }
+  menuDrawerApi.setData({
+    record,
+    isEdit: true,
+    onSuccess: () => gridApi.query(),
+  });
+  menuDrawerApi.open();
 }
 
 async function handleDelete(id: number) {
   try {
-    await deleteMenuApi(id);
+    await deleteMenuApi({ ID: id });
     message.success($t('system.message.deleteSuccess'));
     gridApi.query();
   } catch (error) {
@@ -225,129 +112,48 @@ async function handleDelete(id: number) {
 </script>
 
 <template>
-  <div class="p-4">
+  <Page auto-content-height>
     <Grid>
-      <template #table-title>
-        <div class="flex items-center gap-2">
-          <span class="text-[1rem] font-bold">{{ $t('system.menu.title') }}</span>
-          <a-button type="primary" @click="openAdd()">{{ $t('system.menu.addTitle') }}</a-button>
-        </div>
+      <template #toolbar-tools>
+        <Button type="primary" @click="openAdd()">
+          <Plus class="size-4" />
+          {{ $t('system.menu.addTitle') }}
+        </Button>
       </template>
       <template #nameSlot="{ row }">
         <span class="flex items-center gap-1">
-          <IconifyIcon v-if="row.meta?.icon" :icon="row.meta.icon" class="size-4" />
+          <IconifyIcon
+            v-if="row.meta?.icon"
+            :icon="row.meta.icon"
+            class="size-4"
+          />
           {{ row.name }}
         </span>
       </template>
       <template #titleSlot="{ row }">
         {{ row.meta?.title }}
       </template>
+      <template #disabledSlot="{ row }">
+        <Switch :checked="!row.disabled" disabled size="small" />
+      </template>
       <template #actionSlot="{ row }">
-        <a-button size="small" type="link" @click="openEdit(row)">{{ $t('system.action.edit') }}</a-button>
-        <a-button size="small" type="link" @click="openAdd(row.ID)">{{ $t('system.action.addChild') }}</a-button>
-        <a-popconfirm :title="$t('system.confirm.deleteMenu')" @confirm="handleDelete(row.ID)">
-          <a-button size="small" type="link" danger>{{ $t('system.action.delete') }}</a-button>
+        <a-button size="small" type="link" @click="openEdit(row)">
+          {{ $t('system.action.edit') }}
+        </a-button>
+        <a-button size="small" type="link" @click="openAdd(row.ID)">
+          {{ $t('system.action.addChild') }}
+        </a-button>
+        <a-popconfirm
+          :title="$t('system.confirm.deleteMenu')"
+          @confirm="handleDelete(row.ID)"
+        >
+          <a-button size="small" type="link" danger>
+            {{ $t('system.action.delete') }}
+          </a-button>
         </a-popconfirm>
       </template>
     </Grid>
 
-    <MenuModal :title="editTitle" style="width: 600px">
-      <a-form layout="vertical">
-        <a-row :gutter="16">
-          <a-col :span="12">
-            <a-form-item :label="$t('system.menu.form.name')">
-              <a-input v-model:value="editForm.name" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item :label="$t('system.menu.form.title')">
-              <a-input v-model:value="editForm.meta.title" />
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row :gutter="16">
-          <a-col :span="12">
-            <a-form-item :label="$t('system.menu.form.path')">
-              <a-input v-model:value="editForm.path" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item :label="$t('system.menu.form.component')">
-              <a-input v-model:value="editForm.component" />
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row :gutter="16">
-          <a-col :span="12">
-            <a-form-item :label="$t('system.menu.form.redirect')">
-              <a-input v-model:value="editForm.redirect" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item :label="$t('system.menu.form.icon')">
-              <a-input v-model:value="editForm.meta.icon" />
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row :gutter="16">
-          <a-col :span="8">
-            <a-form-item :label="$t('system.menu.form.order')">
-              <a-input-number v-model:value="editForm.orderNo" class="w-full" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="8">
-            <a-form-item :label="$t('system.menu.form.parentID')">
-              <a-input-number v-model:value="editForm.parentID" class="w-full" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="8">
-            <a-form-item :label="$t('system.menu.form.menuType')">
-              <a-select v-model:value="editForm.menuType">
-                <a-select-option :value="0">{{ $t('system.menu.form.directory') }}</a-select-option>
-                <a-select-option :value="1">{{ $t('system.menu.form.menu') }}</a-select-option>
-                <a-select-option :value="2">{{ $t('system.menu.form.button') }}</a-select-option>
-              </a-select>
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row :gutter="16">
-          <a-col :span="8">
-            <a-form-item :label="$t('system.menu.form.hideMenu')">
-              <a-switch v-model:checked="editForm.meta.hideMenu" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="8">
-            <a-form-item :label="$t('system.menu.form.hideBreadcrumb')">
-              <a-switch v-model:checked="editForm.meta.hideBreadcrumb" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="8">
-            <a-form-item :label="$t('system.menu.form.ignoreKeepAlive')">
-              <a-switch v-model:checked="editForm.meta.ignoreKeepAlive" />
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row :gutter="16">
-          <a-col :span="8">
-            <a-form-item :label="$t('system.menu.form.affixTab')">
-              <a-switch v-model:checked="editForm.meta.affix" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="8">
-            <a-form-item :label="$t('system.menu.form.hideChildrenInMenu')">
-              <a-switch v-model:checked="editForm.meta.hideChildrenInMenu" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="8">
-            <a-form-item :label="$t('system.menu.form.disabled')">
-              <a-switch v-model:checked="editForm.disabled" />
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-form-item :label="$t('system.menu.form.frameSrc')">
-          <a-input v-model:value="editForm.meta.frameSrc" />
-        </a-form-item>
-      </a-form>
-    </MenuModal>
-  </div>
+    <MenuDrawerComp />
+  </Page>
 </template>
